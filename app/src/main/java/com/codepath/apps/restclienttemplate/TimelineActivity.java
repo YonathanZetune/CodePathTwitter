@@ -5,17 +5,13 @@ import android.os.Bundle;
 import com.codepath.apps.restclienttemplate.adapters.TweetsAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
-import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,12 +31,14 @@ public class TimelineActivity extends AppCompatActivity {
     List<Tweet> tweets;
     TweetsAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
+    EndlessRecyclerViewScrollListener endlessScroller;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
 
         swipeRefresh = findViewById(R.id.swipeRefresh);
         swipeRefresh.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -59,17 +57,50 @@ public class TimelineActivity extends AppCompatActivity {
         tweetsRV = findViewById(R.id.tweetsTimeline);
         tweets = new ArrayList<>();
         adapter = new TweetsAdapter(this, tweets);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        tweetsRV.setLayoutManager(llm);
+        endlessScroller = new EndlessRecyclerViewScrollListener(llm) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.i(TAG, "LOADMORE");
+                loadNextDataFromApi(page);
 
-        tweetsRV.setLayoutManager(new LinearLayoutManager(this));
+
+            }
+        };
         tweetsRV.setAdapter(adapter);
+        tweetsRV.addOnScrollListener(endlessScroller);
+
 
         client = TwitterApp.getRestClient(this);
         populateHomeTimeline();
 
     }
 
+    private void loadNextDataFromApi(int page) {
+        client.getNextPageOfTweets(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.i(TAG, "Loaded next page succesfully");
+                try {
+                    adapter.addAll(Tweet.fromJsonArray(json.jsonArray));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.e(TAG, "Loaded next page FAILED", throwable);
+
+            }
+        }, tweets.get(tweets.size() - 1).id);
+    }
+
     private void populateHomeTimeline() {
-        client.getHomeTImeline(new JsonHttpResponseHandler() {
+        client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d(TAG, "Populate timeline json request successful" + json.toString());
