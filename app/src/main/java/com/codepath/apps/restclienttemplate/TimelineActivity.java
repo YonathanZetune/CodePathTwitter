@@ -2,10 +2,15 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.codepath.apps.restclienttemplate.adapters.TweetsAdapter;
+import com.codepath.apps.restclienttemplate.models.SampleModelDao;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.TweetDao;
+import com.codepath.apps.restclienttemplate.models.TweetWithUser;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import androidx.annotation.Nullable;
@@ -42,6 +47,7 @@ public class TimelineActivity extends AppCompatActivity {
     TweetsAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
     EndlessRecyclerViewScrollListener endlessScroller;
+    TweetDao tweetDao;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,6 +84,8 @@ public class TimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
         ActionBar actionbar = getSupportActionBar();
+        tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
+
         if (actionbar != null) {
 //            actionbar.setDisplayUseLogoEnabled(true);
             actionbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.twitter_blue)));
@@ -118,6 +126,19 @@ public class TimelineActivity extends AppCompatActivity {
 
 
         client = TwitterApp.getRestClient(this);
+
+        //query for existing tweets in DB
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<TweetWithUser> tweetWithUsers = tweetDao.recentItems();
+                List<Tweet> tweetsFromDB = TweetWithUser.getTweetList(tweetWithUsers);
+                adapter.clear();
+                adapter.addAll(tweetsFromDB);
+
+            }
+        });
+
         populateHomeTimeline();
 
     }
@@ -151,9 +172,21 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.d(TAG, "Populate timeline json request successful" + json.toString());
                 JSONArray jsonArray = json.jsonArray;
                 try {
+                    final List<Tweet> tweetsFromNetwork = Tweet.fromJsonArray(jsonArray);
                     adapter.clear();
-                    adapter.addAll(Tweet.fromJsonArray(jsonArray));
+                    adapter.addAll(tweetsFromNetwork);
                     swipeRefresh.setRefreshing(false);
+
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            List<User> usersFromNetwork = User.fromJsonTweetArray(tweetsFromNetwork);
+                            tweetDao.insertModel(usersFromNetwork.toArray(new User[0]));
+                            tweetDao.insertModel(tweetsFromNetwork.toArray(new Tweet[0]));
+
+
+                        }
+                    });
                 } catch (JSONException e) {
                     Log.e(TAG, "Parsing Tweets failed", e);
                 }
