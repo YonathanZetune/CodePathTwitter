@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,7 +15,10 @@ import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
+import java.lang.annotation.Target;
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
 
@@ -45,6 +49,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     public int getItemCount() {
         return tweets.size();
     }
+
     // Clean all elements of the recycler
     public void clear() {
         tweets.clear();
@@ -62,6 +67,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView profImage;
         TextView handle;
         TextView description;
+        ImageView shareBtn;
+        ImageView retweetBtn;
+        ImageView mediaImg;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -69,12 +77,23 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             profImage = itemView.findViewById(R.id.profilePicIV);
             handle = itemView.findViewById(R.id.handleTV);
             description = itemView.findViewById(R.id.descriptionTV);
+            shareBtn = itemView.findViewById(R.id.shareButton);
+            retweetBtn = itemView.findViewById(R.id.retweetButton);
+            mediaImg = itemView.findViewById(R.id.mediaIV);
 
         }
 
         public void bind(Tweet tweet) {
             handle.setText(tweet.user.screenName);
             description.setText(tweet.body);
+            //programatically deteremine to show media image or not
+            if (tweet.mediaURL.isEmpty()) {
+                mediaImg.setVisibility(View.GONE);
+            } else {
+                Glide.with(context).load(tweet.mediaURL)
+                        .fitCenter().transform(new RoundedCornersTransformation(50, 5)).into(mediaImg);
+
+            }
             Glide.with(context).load(tweet.user.imageURL).into(profImage);
         }
     }

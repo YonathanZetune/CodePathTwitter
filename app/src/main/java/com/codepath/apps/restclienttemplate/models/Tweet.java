@@ -17,12 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Parcel
-@Entity(foreignKeys = @ForeignKey(entity= User.class, parentColumns="id", childColumns="userId"))
+@Entity(foreignKeys = @ForeignKey(entity = User.class, parentColumns = "id", childColumns = "userId"))
 public class Tweet {
     @ColumnInfo
     public String body;
     @ColumnInfo
     public String createdAt;
+    @ColumnInfo
+    public String mediaURL;
     @ColumnInfo
     @PrimaryKey
     public long id;
@@ -39,6 +41,11 @@ public class Tweet {
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
         tweet.body = jsonObject.getString("text");
+        try {
+            tweet.mediaURL = jsonObject.getJSONObject("entities").getJSONArray("media").getJSONObject(0).getString("media_url_https");
+        } catch (JSONException e) {
+            tweet.mediaURL = "";
+        }
         tweet.id = jsonObject.getLong("id");
         tweet.createdAt = jsonObject.getString("created_at");
         User user = User.fromJson(jsonObject.getJSONObject("user"));

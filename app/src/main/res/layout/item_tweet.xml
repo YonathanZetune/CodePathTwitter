@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,22 +20,116 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:textSize="7sp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/profilePicIV"
+        android:textSize="7sp"
         tools:text="9to5mac" />
 
     <TextView
         android:id="@+id/descriptionTV"
-        android:layout_marginEnd="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/handleTV"
-        android:textSize="10sp"
-
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+
+        android:layout_marginEnd="5dp"
         android:layout_toEndOf="@+id/profilePicIV"
+        android:textSize="10sp"
         tools:text="WWDC 2020 scheduled for June 22" />
+
+    <ImageView
+        android:id="@+id/mediaIV"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@+id/descriptionTV"
+        android:scaleType="centerCrop"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toEndOf="@+id/profilePicIV"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <LinearLayout
+        android:id="@+id/buttonsLL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mediaIV"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+
+        android:layout_toEndOf="@+id/profilePicIV"
+        android:gravity="center|top|bottom"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/shareButton"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginTop="10dp"
+
+            android:layout_weight="1"
+            android:tint="@color/medium_gray"
+            app:srcCompat="@android:drawable/ic_menu_share" />
+
+        <LinearLayout
+            android:id="@+id/likeLL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:gravity="center|top|bottom"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/likeButton"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+
+                android:tint="@color/medium_gray"
+                app:srcCompat="@drawable/ic_vector_heart" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="85"
+
+                android:textColor="@color/medium_gray" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/retweetLL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:gravity="center|top|bottom"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/retweetButton"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:tint="@color/medium_gray"
+                app:srcCompat="@drawable/ic_vector_retweet" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="32"
+
+
+                android:textColor="@color/medium_gray" />
+        </LinearLayout>
+    </LinearLayout>
+
+
 </RelativeLayout>
