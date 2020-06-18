@@ -86,12 +86,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public void bind(Tweet tweet) {
             handle.setText(tweet.user.screenName);
             description.setText(tweet.body);
+            double width = (mediaImg.getWidth() * 0.9);
+            int iwidth = ((int) width);
+            double height = (mediaImg.getHeight() * 0.9);
+            int iheight = ((int) height);
             //programatically deteremine to show media image or not
             if (tweet.mediaURL.isEmpty()) {
                 mediaImg.setVisibility(View.GONE);
             } else {
-                Glide.with(context).load(tweet.mediaURL)
-                        .fitCenter().transform(new RoundedCornersTransformation(50, 5)).into(mediaImg);
+                Glide.with(context).load(tweet.mediaURL).override(iwidth, 150).transform(new RoundedCornersTransformation(50, 5)).into(mediaImg);
 
             }
             Glide.with(context).load(tweet.user.imageURL).into(profImage);

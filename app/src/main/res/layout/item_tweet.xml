@@ -44,11 +44,11 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_below="@+id/descriptionTV"
-        android:scaleType="centerCrop"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_toEndOf="@+id/profilePicIV"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        android:scaleType="centerCrop"
+        />
 
     <LinearLayout
         android:id="@+id/buttonsLL"

@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -16,6 +17,7 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.ActionMenuItem;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -24,6 +26,7 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -84,6 +87,10 @@ public class TimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
         ActionBar actionbar = getSupportActionBar();
+        actionbar.setTitle("");
+        actionbar.setLogo(R.drawable.ic_launcher_twitter);
+        actionbar.setDisplayUseLogoEnabled(true);
+        actionbar.setDisplayShowHomeEnabled(true);
         tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
 
         if (actionbar != null) {
@@ -189,6 +196,8 @@ public class TimelineActivity extends AppCompatActivity {
                     });
                 } catch (JSONException e) {
                     Log.e(TAG, "Parsing Tweets failed", e);
+                    swipeRefresh.setRefreshing(false);
+
                 }
 
             }
@@ -196,6 +205,8 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.e(TAG, "Populate timeline json request FAILED", throwable);
+                swipeRefresh.setRefreshing(false);
+
 
             }
         });
