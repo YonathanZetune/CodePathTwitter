@@ -21,6 +21,7 @@ The following **stretch** features are implemented:
 * [x] User can **see a counter with total number of characters left for tweet** on compose tweet page
 * [x] User can **pull down to refresh tweets timeline**
 * [x] User is using **"Twitter branded" colors and styles**
+* [x] Links in tweets are clickable and will launch the web browser 
 * [ ] User sees an **indeterminate progress indicator** when any background or network task is happening
 * [ ] User can tap a tweet to **open a detailed tweet view**
   * [ ] User can **take favorite (and unfavorite) or reweet** actions on a tweet

@@ -23,7 +23,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/profilePicIV"
-        android:textSize="7sp"
+
+        android:textSize="12sp"
         tools:text="9to5mac" />
 
     <TextView
@@ -33,10 +34,11 @@
         android:layout_below="@+id/handleTV"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-
+        android:autoLink="all"
+        android:linksClickable="true"
         android:layout_marginEnd="5dp"
         android:layout_toEndOf="@+id/profilePicIV"
-        android:textSize="10sp"
+        android:textSize="14sp"
         tools:text="WWDC 2020 scheduled for June 22" />
 
     <ImageView

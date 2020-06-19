@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItem;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -38,11 +39,13 @@ import java.util.List;
 
 import okhttp3.Headers;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements ComposeFragment.ComposeFragmentListener {
 
 
     public static final String TAG = "TimelineActivity";
     public static final int REQUEST_CODE = 20;
+    public final static int MAX_TWEET_LENGTH = 280;
+
 
     TwitterClient client;
     RecyclerView tweetsRV;
@@ -62,8 +65,11 @@ public class TimelineActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.compose) {
             //open up compose screen
-            Intent intent = new Intent(this, ComposeActivity.class);
-            startActivityForResult(intent, REQUEST_CODE);
+//            Intent intent = new Intent(this, ComposeActivity.class);
+//            startActivityForResult(intent, REQUEST_CODE);
+            FragmentManager fm = getSupportFragmentManager();
+            ComposeFragment editNameDialogFragment = ComposeFragment.newInstance("Some Title");
+            editNameDialogFragment.show(fm, "fragment_edit_name");
         }
         return true;
     }
@@ -210,5 +216,47 @@ public class TimelineActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onFinishEditDialog(String inputText) {
+        Toast.makeText(this, "Hi, " + inputText, Toast.LENGTH_SHORT).show();
+//        Parcelable tweet = getIntent().getParcelableExtra("tweet");
+//        Tweet mTweet = (Tweet) Parcels.unwrap(tweet);
+        String tweetContent = inputText;
+        if (tweetContent.isEmpty()) {
+            Toast.makeText(this, "Please type a tweet", Toast.LENGTH_LONG).show();
+//                return;
+        }
+        if (tweetContent.length() > MAX_TWEET_LENGTH) {
+            Toast.makeText(this, "Tweet is too long, must be under 280 characters", Toast.LENGTH_LONG).show();
+//                return;
+        }
+        Toast.makeText(this, tweetContent, Toast.LENGTH_LONG).show();
+        client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.i(TAG, "Tweet successfully published");
+                try {
+                    Tweet tweet = Tweet.fromJson(json.jsonObject);
+                    Log.i(TAG, "Tweet parsed: " + tweet.toString());
+                    Intent intent = new Intent();
+                    intent.putExtra("tweet", Parcels.wrap(tweet));
+                    setResult(RESULT_OK, intent);
+                    onActivityResult(REQUEST_CODE, RESULT_OK, intent);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.e(TAG, "Failed to publish" + throwable.toString());
+            }
+        });
+//        tweets.add(0, mTweet);
+//        adapter.notifyDataSetChanged();
+//        tweetsRV.smoothScrollToPosition(0);
     }
 }
