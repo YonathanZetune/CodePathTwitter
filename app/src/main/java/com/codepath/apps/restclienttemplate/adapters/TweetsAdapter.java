@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.TimelineActivity;
+import com.codepath.apps.restclienttemplate.TweetDetailActivity;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.lang.annotation.Target;
@@ -70,6 +73,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView shareBtn;
         ImageView retweetBtn;
         ImageView mediaImg;
+        TextView retweetsTV;
+        TextView favsTV;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -80,12 +85,24 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             shareBtn = itemView.findViewById(R.id.shareButton);
             retweetBtn = itemView.findViewById(R.id.retweetButton);
             mediaImg = itemView.findViewById(R.id.mediaIV);
+            retweetsTV = itemView.findViewById(R.id.retweetsTV);
+            favsTV = itemView.findViewById(R.id.favsTV);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, TweetDetailActivity.class);
+                    context.startActivity(intent);
+
+                }
+            });
 
         }
 
         public void bind(Tweet tweet) {
             handle.setText(tweet.user.screenName);
             description.setText(tweet.body);
+            retweetsTV.setText(String.valueOf(tweet.retweetCount));
+            favsTV.setText(String.valueOf(tweet.favCount));
             double width = (mediaImg.getWidth() * 0.9);
             int iwidth = ((int) width);
             double height = (mediaImg.getHeight() * 0.9);
@@ -97,7 +114,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 Glide.with(context).load(tweet.mediaURL).override(iwidth, 150).transform(new RoundedCornersTransformation(50, 5)).into(mediaImg);
 
             }
-            Glide.with(context).load(tweet.user.imageURL).into(profImage);
+            Glide.with(context).load(tweet.user.imageURL).transform(new RoundedCornersTransformation(30, 5)).into(profImage);
         }
     }
 

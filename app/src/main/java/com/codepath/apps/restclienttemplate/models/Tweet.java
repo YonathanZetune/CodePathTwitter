@@ -30,6 +30,10 @@ public class Tweet {
     public long id;
     @ColumnInfo
     public long userId;
+    @ColumnInfo
+    public long retweetCount;
+    @ColumnInfo
+    public int favCount;
     @Ignore
     public User user;
 
@@ -48,6 +52,8 @@ public class Tweet {
         }
         tweet.id = jsonObject.getLong("id");
         tweet.createdAt = jsonObject.getString("created_at");
+        tweet.favCount = jsonObject.getInt("favorite_count");
+        tweet.retweetCount = jsonObject.getInt("retweet_count");
         User user = User.fromJson(jsonObject.getJSONObject("user"));
         tweet.user = user;
         tweet.userId = user.id;

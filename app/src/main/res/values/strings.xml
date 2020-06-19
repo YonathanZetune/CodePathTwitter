@@ -16,5 +16,6 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="tweet">Tweet</string>
     <string name="tweet_length">280</string>
+    <string name="tweet_detail_hint">Write a reply...</string>
 
 </resources>
