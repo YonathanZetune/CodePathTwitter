@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TimelineActivity;
 import com.codepath.apps.restclienttemplate.TweetDetailActivity;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+
+import org.parceler.Parcels;
 
 import java.lang.annotation.Target;
 import java.util.List;
@@ -87,26 +90,28 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             mediaImg = itemView.findViewById(R.id.mediaIV);
             retweetsTV = itemView.findViewById(R.id.retweetsTV);
             favsTV = itemView.findViewById(R.id.favsTV);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, TweetDetailActivity.class);
-                    context.startActivity(intent);
 
-                }
-            });
 
         }
 
-        public void bind(Tweet tweet) {
+        public void bind(final Tweet tweet) {
             handle.setText(tweet.user.screenName);
             description.setText(tweet.body);
             retweetsTV.setText(String.valueOf(tweet.retweetCount));
             favsTV.setText(String.valueOf(tweet.favCount));
+            description.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (context.getClass() == TimelineActivity.class) {
+                        Intent intent = new Intent(context, TweetDetailActivity.class);
+                        intent.putExtra(TweetDetailActivity.TWEET_EXTRA, Parcels.wrap(tweet));
+                        context.startActivity(intent);
+                    }
+
+                }
+            });
             double width = (mediaImg.getWidth() * 0.9);
             int iwidth = ((int) width);
-            double height = (mediaImg.getHeight() * 0.9);
-            int iheight = ((int) height);
             //programatically deteremine to show media image or not
             if (tweet.mediaURL.isEmpty()) {
                 mediaImg.setVisibility(View.GONE);
