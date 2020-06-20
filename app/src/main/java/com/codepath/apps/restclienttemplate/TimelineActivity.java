@@ -68,7 +68,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 //            Intent intent = new Intent(this, ComposeActivity.class);
 //            startActivityForResult(intent, REQUEST_CODE);
             FragmentManager fm = getSupportFragmentManager();
-            ComposeFragment editNameDialogFragment = ComposeFragment.newInstance("Some Title");
+            ComposeFragment editNameDialogFragment = ComposeFragment.newInstance("Some Title", false);
             editNameDialogFragment.show(fm, "fragment_edit_name");
         }
         return true;
@@ -255,8 +255,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 Log.e(TAG, "Failed to publish" + throwable.toString());
             }
         });
-//        tweets.add(0, mTweet);
-//        adapter.notifyDataSetChanged();
-//        tweetsRV.smoothScrollToPosition(0);
+
     }
 }

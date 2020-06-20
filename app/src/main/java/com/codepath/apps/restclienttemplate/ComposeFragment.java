@@ -53,11 +53,12 @@ public class ComposeFragment extends DialogFragment implements TextView.OnEditor
 
     }
 
-    public static ComposeFragment newInstance(String title) {
+    public static ComposeFragment newInstance(String title, boolean isReply) {
         ComposeFragment frag = new ComposeFragment();
         Bundle args = new Bundle();
 
-        args.putString("title", title);
+        args.putString("handle", title);
+        args.putBoolean("isReply", isReply);
         frag.setArguments(args);
         return frag;
     }
@@ -96,6 +97,7 @@ public class ComposeFragment extends DialogFragment implements TextView.OnEditor
         charCountTV = view.findViewById(R.id.charCountTV);
         charCountTV.setText(String.valueOf(MAX_TWEET_LENGTH));
         composeET.setOnEditorActionListener(this);
+        composeET.setText(getArguments().getString("handle"));
 
         composeET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -130,7 +132,7 @@ public class ComposeFragment extends DialogFragment implements TextView.OnEditor
             @Override
             public void onClick(View view) {
                 onEditorAction(composeET, EditorInfo.IME_ACTION_DONE, null);
-dismiss();
+                dismiss();
                 //make api call to send tweet
 
             }

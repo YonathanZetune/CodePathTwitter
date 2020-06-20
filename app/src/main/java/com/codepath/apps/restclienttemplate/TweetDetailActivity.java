@@ -23,7 +23,7 @@ import org.parceler.Parcels;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import okhttp3.Headers;
 
-public class TweetDetailActivity extends AppCompatActivity {
+public class TweetDetailActivity extends AppCompatActivity implements ComposeFragment.ComposeFragmentListener{
 
 
     public static String TWEET_EXTRA = "TWEET_EXTRA";
@@ -112,6 +112,11 @@ public class TweetDetailActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    @Override
+    public void onFinishEditDialog(String inputText) {
 
     }
 }
