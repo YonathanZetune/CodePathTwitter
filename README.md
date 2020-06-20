@@ -2,14 +2,16 @@
 
 **FBU Twitter** is an android app that allows a user to view his Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
 
+Time Spent: **16** hours spent in total
+
 ## User Stories
 
 The following **required** functionality is completed:
 
 * [x]	User can **sign in to Twitter** using OAuth login
 * [x]	User can **view tweets from their home timeline**
-  * [x] User is displayed the username, name, and body for each tweet
-  * [ ] User is displayed the [relative timestamp](https://gist.github.com/nesquena/f786232f5ef72f6e10a7) for each tweet "8m", "7h"
+    * [x] User is displayed the username, name, and body for each tweet
+    * [x] User is displayed the [relative timestamp](https://gist.github.com/nesquena/f786232f5ef72f6e10a7) for each tweet "8m", "7h"
 * [x] User can **compose and post a new tweet**
   * [x] User can click a “Compose” icon in the Action Bar on the top right
   * [x] User can then enter a new tweet and post this to twitter
@@ -23,14 +25,19 @@ The following **stretch** features are implemented:
 * [x] User is using **"Twitter branded" colors and styles**
 * [x] Links in tweets are clickable and will launch the web browser 
 * [ ] User sees an **indeterminate progress indicator** when any background or network task is happening
-* [ ] User can tap a tweet to **open a detailed tweet view**
-  * [ ] User can **take favorite (and unfavorite) or reweet** actions on a tweet
-* [ ] User can **see embedded image media within a tweet** on list or detail view.
+* [x] User can tap a tweet to **open a detailed tweet view**
+    * [ ] User can **take favorite (and unfavorite) or reweet** actions on a tweet
+* [x] User can **see embedded image media within a tweet** on list or detail view.
 
 The following **bonus** features are implemented:
 
 * [x] User can view more tweets as they scroll with infinite pagination
-* [ ] User can **click a link within a tweet body** on tweet details view. The click will launch the web browser with relevant page opened.
+* [x] Compose tweet functionality is build using modal overlay
+* [x] User can **click a link within a tweet body** on tweet details view. The click will launch the web browser with relevant page opened.
+* [ ] User can view following / followers list through any profile they view.
+* [ ] Use the View Binding library to reduce view boilerplate.
+* [x] User can open the twitter app offline and see last loaded tweets. Persisted in SQLite tweets are refreshed on every application launch. While "live data" is displayed when app can get it from Twitter API, it is also saved for use in offline mode.
+* [ ] On the Twitter timeline, leverage the CoordinatorLayout to apply scrolling behavior that hides / shows the toolbar.
 * [x] Use Parcelable instead of Serializable using the popular [Parceler library](http://guides.codepath.org/android/Using-Parceler).
 * [x] Replace all icon drawables and other static image assets with [vector drawables](http://guides.codepath.org/android/Drawables#vector-drawables) where appropriate.
 
@@ -38,9 +45,6 @@ The following **bonus** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='FBUTweets.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
-
-GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
